@@ -23,3 +23,15 @@ class ProfileImagePickedErrorState extends SocialStates {}
 class CoverImagePickedSuccessState extends SocialStates {}
 
 class CoverImagePickedErrorState extends SocialStates {}
+
+class UploadProfileImageSuccessState extends SocialStates {}
+
+class UploadProfileImageErrorState extends SocialStates {}
+
+class UploadCoverImageSuccessState extends SocialStates {}
+
+class UploadCoverImageErrorState extends SocialStates {}
+
+class UserUpdateErrorState extends SocialStates {}
+
+class UserUpdateLoadingState extends SocialStates {}

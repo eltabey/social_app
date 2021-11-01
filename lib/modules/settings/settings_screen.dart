@@ -194,150 +194,154 @@ class SettingsScreen extends StatelessWidget {
 
           return Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Column(
+            child: ListView(
               children: [
-                Container(
-                  height: 260,
-                  child: Stack(
-                    alignment: AlignmentDirectional.bottomCenter,
-                    children: [
-                      Align(
-                        alignment: AlignmentDirectional.topCenter,
-                        child: Container(
-                          width: double.infinity,
-                          height: 200,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(5),
-                              topRight: Radius.circular(5),
-                            ),
-                            image: DecorationImage(
-                              image: NetworkImage('${userModel.cover}'),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ),
-                      CircleAvatar(
-                        radius: 64,
-                        backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
-                        child: CircleAvatar(
-                          radius: 60,
-                          backgroundImage: NetworkImage('${userModel.image}'),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  '${userModel.name}',
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-                Text(
-                  '${userModel.bio}',
-                  style: Theme.of(context).textTheme.caption,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: InkWell(
-                          child: Column(
-                            children: [
-                              Text(
-                                '100',
-                                style: Theme.of(context).textTheme.subtitle2,
-                              ),
-                              Text(
-                                'Posts',
-                                style: Theme.of(context).textTheme.caption,
-                              ),
-                            ],
-                          ),
-                          onTap: () {},
-                        ),
-                      ),
-                      Expanded(
-                        child: InkWell(
-                          child: Column(
-                            children: [
-                              Text(
-                                '250',
-                                style: Theme.of(context).textTheme.subtitle2,
-                              ),
-                              Text(
-                                'Photos',
-                                style: Theme.of(context).textTheme.caption,
-                              ),
-                            ],
-                          ),
-                          onTap: () {},
-                        ),
-                      ),
-                      Expanded(
-                        child: InkWell(
-                          child: Column(
-                            children: [
-                              Text(
-                                '10k',
-                                style: Theme.of(context).textTheme.subtitle2,
-                              ),
-                              Text(
-                                'Followers',
-                                style: Theme.of(context).textTheme.caption,
-                              ),
-                            ],
-                          ),
-                          onTap: () {},
-                        ),
-                      ),
-                      Expanded(
-                        child: InkWell(
-                          child: Column(
-                            children: [
-                              Text(
-                                '64',
-                                style: Theme.of(context).textTheme.subtitle2,
-                              ),
-                              Text(
-                                'Followings',
-                                style: Theme.of(context).textTheme.caption,
-                              ),
-                            ],
-                          ),
-                          onTap: () {},
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Row(
+                Column(
                   children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Add Photos',
-                        ),
+                    Container(
+                      height: 260,
+                      child: Stack(
+                        alignment: AlignmentDirectional.bottomCenter,
+                        children: [
+                          Align(
+                            alignment: AlignmentDirectional.topCenter,
+                            child: Container(
+                              width: double.infinity,
+                              height: 200,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(5),
+                                  topRight: Radius.circular(5),
+                                ),
+                                image: DecorationImage(
+                                  image: NetworkImage('${userModel.cover}'),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                          CircleAvatar(
+                            radius: 64,
+                            backgroundColor:
+                                Theme.of(context).scaffoldBackgroundColor,
+                            child: CircleAvatar(
+                              radius: 60,
+                              backgroundImage: NetworkImage('${userModel.image}'),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(
-                      width: 10.0,
+                      height: 5,
                     ),
-                    OutlinedButton(
-                      onPressed: () {
-                        navigateTo(
-                            context: context, widget: EditProfileScreen());
-                      },
-                      child: Icon(
-                        IconBroken.Edit,
-                        size: 16.0,
+                    Text(
+                      '${userModel.name}',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                    Text(
+                      '${userModel.bio}',
+                      style: Theme.of(context).textTheme.caption,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: InkWell(
+                              child: Column(
+                                children: [
+                                  Text(
+                                    '100',
+                                    style: Theme.of(context).textTheme.subtitle2,
+                                  ),
+                                  Text(
+                                    'Posts',
+                                    style: Theme.of(context).textTheme.caption,
+                                  ),
+                                ],
+                              ),
+                              onTap: () {},
+                            ),
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              child: Column(
+                                children: [
+                                  Text(
+                                    '250',
+                                    style: Theme.of(context).textTheme.subtitle2,
+                                  ),
+                                  Text(
+                                    'Photos',
+                                    style: Theme.of(context).textTheme.caption,
+                                  ),
+                                ],
+                              ),
+                              onTap: () {},
+                            ),
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              child: Column(
+                                children: [
+                                  Text(
+                                    '10k',
+                                    style: Theme.of(context).textTheme.subtitle2,
+                                  ),
+                                  Text(
+                                    'Followers',
+                                    style: Theme.of(context).textTheme.caption,
+                                  ),
+                                ],
+                              ),
+                              onTap: () {},
+                            ),
+                          ),
+                          Expanded(
+                            child: InkWell(
+                              child: Column(
+                                children: [
+                                  Text(
+                                    '64',
+                                    style: Theme.of(context).textTheme.subtitle2,
+                                  ),
+                                  Text(
+                                    'Followings',
+                                    style: Theme.of(context).textTheme.caption,
+                                  ),
+                                ],
+                              ),
+                              onTap: () {},
+                            ),
+                          ),
+                        ],
                       ),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () {},
+                            child: Text(
+                              'Add Photos',
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10.0,
+                        ),
+                        OutlinedButton(
+                          onPressed: () {
+                            navigateTo(
+                                context: context, widget: EditProfileScreen());
+                          },
+                          child: Icon(
+                            IconBroken.Edit,
+                            size: 16.0,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

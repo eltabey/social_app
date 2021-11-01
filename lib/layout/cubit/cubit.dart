@@ -89,15 +89,116 @@ class SocialCubit extends Cubit<SocialStates> {
     }
   }
 
-  void uploadProfileImage() {
+  void uploadProfileImage({
+    @required String name,
+    @required String phone,
+    @required String bio,
+  }) {
+    emit(UserUpdateLoadingState());
+
     firebase_storage.FirebaseStorage.instance
         .ref()
         .child('users/${Uri.file(profileImage.path).pathSegments.last}')
-        .putBlob(profileImage)
+        .putFile(profileImage)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
-        print(value);
-      }).catchError((error) {});
-    }).catchError((error) {});
+        //emit(UploadProfileImageSuccessState());
+        updateUser(
+          name: name,
+          phone: phone,
+          bio: bio,
+          image: value,
+        );
+      }).catchError((error) {
+        emit(UploadProfileImageErrorState());
+      });
+    }).catchError((error) {
+      emit(UploadProfileImageErrorState());
+    });
+  }
+
+  void uploadCaverImage({
+    @required String name,
+    @required String phone,
+    @required String bio,
+  }) {
+    emit(UserUpdateLoadingState());
+
+    firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('users/${Uri.file(caverImage.path).pathSegments.last}')
+        .putFile(caverImage)
+        .then((value) {
+      value.ref.getDownloadURL().then((value) {
+        //emit(UploadCoverImageSuccessState());
+        updateUser(
+          name: name,
+          phone: phone,
+          bio: bio,
+          cover: value,
+        );
+      }).catchError((error) {
+        emit(UploadCoverImageErrorState());
+      });
+    }).catchError((error) {
+      emit(UploadCoverImageErrorState());
+    });
+  }
+
+/*  void updateUserImage({
+    @required String name,
+    @required String phone,
+    @required String bio,
+  })
+  {
+    emit(UserUpdateLoadingState());
+
+    if (caverImage != null)
+    {
+      uploadCaverImage();
+    } else if (profileImage != null)
+    {
+      uploadCaverImage();
+    }
+    else if (caverImage != null && profileImage != null)
+    {
+    }
+    else
+      {
+      updateUser(
+        name: name,
+        phone: phone,
+        bio: bio,
+      );
+    }
+  }*/
+
+  void updateUser({
+    @required String name,
+    @required String phone,
+    @required String bio,
+    String image,
+    String cover,
+  }) {
+    UserModel model = UserModel(
+      name: name,
+      pone: phone,
+      uid: userModel.uid,
+      bio: bio,
+      cover: cover ?? userModel.cover,
+      image: image ?? userModel.image,
+      email: userModel.email,
+      isEmailVerified: false,
+    );
+
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userModel.uid)
+        .update(model.toMap())
+        .then((value) {
+      getUserData();
+    }).catchError((error) {
+      emit(UserUpdateErrorState());
+    });
   }
 }
