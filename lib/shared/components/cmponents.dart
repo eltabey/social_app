@@ -116,6 +116,7 @@ Widget defaultAppBar({
       ),
       actions: actions,
       titleSpacing: 0.0,
+      elevation: 0.0,
     );
 /////////////////////////////////////////////////////////////////////////
 Widget defaultFormField({

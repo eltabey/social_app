@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:social/layout/cubit/states.dart';
+import 'package:social/models/post_model.dart';
 import 'package:social/models/social_user_model.dart';
 import 'package:social/modules/chats/chats_screen.dart';
 import 'package:social/modules/feeds/feeds_screen.dart';
@@ -190,7 +191,6 @@ class SocialCubit extends Cubit<SocialStates> {
       email: userModel.email,
       isEmailVerified: false,
     );
-
     FirebaseFirestore.instance
         .collection('users')
         .doc(userModel.uid)
@@ -199,6 +199,88 @@ class SocialCubit extends Cubit<SocialStates> {
       getUserData();
     }).catchError((error) {
       emit(UserUpdateErrorState());
+    });
+  }
+
+  ////////////////////////////////////////////////////////////////
+  //create post
+
+  File postImage;
+
+  //var picker = ImagePicker();
+
+  Future<void> gitPostImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      postImage = File(pickedFile.path);
+      emit(PostImagePickedSuccessState());
+    } else {
+      print('NO IMAGE selected');
+      emit(PostImagePickedErrorState());
+    }
+  }
+
+
+  void removePostImage()
+  {
+    postImage = null;
+    emit(RemovePostImageSuccessState());
+  }
+
+  void uploadPostImage({
+    /*@required String name,
+    @required String image,
+    @required String uid,*/
+    @required String dateTime,
+    @required String text,
+  }) {
+    emit(CreatePostLoadingState());
+
+    firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('posts/${Uri.file(postImage.path).pathSegments.last}')
+        .putFile(postImage)
+        .then((value) {
+      value.ref.getDownloadURL().then((value) {
+        createPost(
+          dateTime: dateTime,
+          text: text,
+          postImage: value
+        );
+      }).catchError((error) {
+        emit(CreatePostSuccessState());
+      });
+    }).catchError((error) {
+      emit(CreatePostErrorState());
+    });
+  }
+
+  void createPost({
+    @required String dateTime,
+    @required String text,
+    String postImage,
+  }) {
+    emit(CreatePostLoadingState());
+
+    PostModel model = PostModel(
+      name: userModel.name,
+      uid: userModel.uid,
+      image: userModel.image,
+      dateTime: dateTime,
+      postImage: postImage ?? '',
+      text: text,
+    );
+
+    FirebaseFirestore.instance
+        .collection('posts')
+        .add(model.toMap())
+        .then((value)
+    {
+      emit(CreatePostSuccessState());
+    })
+        .catchError((error)
+    {
+      emit(CreatePostErrorState());
     });
   }
 }
