@@ -220,9 +220,7 @@ class SocialCubit extends Cubit<SocialStates> {
     }
   }
 
-
-  void removePostImage()
-  {
+  void removePostImage() {
     postImage = null;
     emit(RemovePostImageSuccessState());
   }
@@ -242,11 +240,7 @@ class SocialCubit extends Cubit<SocialStates> {
         .putFile(postImage)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
-        createPost(
-          dateTime: dateTime,
-          text: text,
-          postImage: value
-        );
+        createPost(dateTime: dateTime, text: text, postImage: value);
       }).catchError((error) {
         emit(CreatePostSuccessState());
       });
@@ -274,13 +268,32 @@ class SocialCubit extends Cubit<SocialStates> {
     FirebaseFirestore.instance
         .collection('posts')
         .add(model.toMap())
-        .then((value)
-    {
+        .then((value) {
       emit(CreatePostSuccessState());
-    })
-        .catchError((error)
-    {
+    }).catchError((error) {
       emit(CreatePostErrorState());
+    });
+  }
+
+  ////////////////////////////////////////////////////////////////
+  //get Posts
+
+  List<PostModel> posts = [];
+
+  void getPosts() {
+    FirebaseFirestore.instance
+        .collection('posts')
+        .get()
+        .then((value) {
+          value.docs.forEach((element)
+          {
+            posts.add(PostModel.fromJson(element.data()));
+          });
+
+          emit(GetPostsSuccessState());
+    })
+        .catchError((error) {
+          emit(GetPostsErrorState(error.toString()));
     });
   }
 }
