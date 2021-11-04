@@ -345,7 +345,7 @@ class FeedsScreen extends StatelessWidget {
         listener: (context, stata) {},
         builder: (context, stata) {
           return ConditionalBuilder(
-            condition: SocialCubit.get(context).posts.length > 0,
+            condition: SocialCubit.get(context).posts.length > 0  && SocialCubit.get(context).userModel != null ,
             builder: (context) => SingleChildScrollView(
               physics: BouncingScrollPhysics(),
               child: Column(
@@ -380,7 +380,11 @@ class FeedsScreen extends StatelessWidget {
                   ListView.separated(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) => buildPostItem(SocialCubit.get(context).posts[index] ,context),
+                    itemBuilder: (context, index) => buildPostItem(
+                      SocialCubit.get(context).posts[index],
+                      context,
+                      index,
+                    ),
                     separatorBuilder: (context, index) => SizedBox(
                       height: 10,
                     ),
@@ -397,7 +401,7 @@ class FeedsScreen extends StatelessWidget {
         });
   }
 
-  Widget buildPostItem(PostModel model, context) => Card(
+  Widget buildPostItem(PostModel model, context, index) => Card(
         clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 6.0,
         margin: EdgeInsets.symmetric(horizontal: 8),
@@ -410,8 +414,7 @@ class FeedsScreen extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 25,
-                    backgroundImage: NetworkImage(
-                        '${model.image}'),
+                    backgroundImage: NetworkImage('${model.image}'),
                   ),
                   SizedBox(
                     width: 15,
@@ -519,22 +522,21 @@ class FeedsScreen extends StatelessWidget {
                   ),
                 ),
               ),*/
-              if(model.postImage != "")
+              if (model.postImage != "")
                 Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                child: Container(
-                  width: double.infinity,
-                  height: 250,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    image: DecorationImage(
-                      image: NetworkImage(
-                          '${model.postImage}'),
-                      fit: BoxFit.cover,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  child: Container(
+                    width: double.infinity,
+                    height: 250,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      image: DecorationImage(
+                        image: NetworkImage('${model.postImage}'),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
-              ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Row(
@@ -555,7 +557,7 @@ class FeedsScreen extends StatelessWidget {
                                 width: 5,
                               ),
                               Text(
-                                '0 ',
+                                '${SocialCubit.get(context).like[index]}',
                                 style: Theme.of(context).textTheme.caption,
                               )
                             ],
@@ -628,7 +630,9 @@ class FeedsScreen extends StatelessWidget {
                     ),
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      SocialCubit.get(context).likePosts(SocialCubit.get(context).postsId[index]);
+                    },
                     child: Row(
                       children: [
                         Icon(
