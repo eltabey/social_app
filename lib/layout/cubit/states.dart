@@ -71,3 +71,35 @@ class LikePostsErrorState extends SocialStates {
 
   LikePostsErrorState(this.error);
 }
+///////////////////////////////////////////////////////
+class GetAllUserLoadingState extends SocialStates {}
+
+class GetAllUserSuccessState extends SocialStates {}
+
+class GetAllUserErrorState extends SocialStates {
+  final String error;
+
+  GetAllUserErrorState(this.error);
+}
+//////////////////////////////////////////////////////////
+//chat
+
+class SendMessageSuccessState extends SocialStates {}
+
+class SendMessageErrorState extends SocialStates {}
+
+class GetMessagesSuccessState extends SocialStates {}
+
+class GetMessagesErrorState extends SocialStates {}
+
+class ChatImagePickedSuccessState extends SocialStates {}
+
+class ChatImagePickedErrorState extends SocialStates {}
+
+class RemoveChatImageSuccessState extends SocialStates {}
+
+class UploadChatLoadingState extends SocialStates {}
+
+class UploadChatSuccessState extends SocialStates {}
+
+class UploadChatErrorState extends SocialStates {}

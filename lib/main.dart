@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social/layout/cubit/cubit.dart';
@@ -16,6 +17,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
+  //var token = FirebaseMessaging.private.
+/* var token = await FirebaseMessaging._instance.getToken();
+ print(token);*/
+  
 
   await CacheHelper.init();
 
@@ -64,9 +69,10 @@ class MyApp extends StatelessWidget {
           create: (BuildContext context) => LoginCubit(),
         ),
         BlocProvider(
-          create: (BuildContext context) => SocialCubit()
-            ..getUserData()
-            ..getPosts(),
+            create: (BuildContext context) => SocialCubit()
+              ..getUserData()
+              ..getPosts()
+              //..getUsers()
         ),
       ],
       child: BlocConsumer<AppCubit, AppStates>(

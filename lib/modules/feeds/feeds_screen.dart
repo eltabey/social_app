@@ -345,7 +345,8 @@ class FeedsScreen extends StatelessWidget {
         listener: (context, stata) {},
         builder: (context, stata) {
           return ConditionalBuilder(
-            condition: SocialCubit.get(context).posts.length > 0  && SocialCubit.get(context).userModel != null ,
+            condition: SocialCubit.get(context).userModel != null &&
+                SocialCubit.get(context).posts.length > 0,
             builder: (context) => SingleChildScrollView(
               physics: BouncingScrollPhysics(),
               child: Column(
@@ -631,7 +632,8 @@ class FeedsScreen extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      SocialCubit.get(context).likePosts(SocialCubit.get(context).postsId[index]);
+                      SocialCubit.get(context)
+                          .likePosts(SocialCubit.get(context).postsId[index]);
                     },
                     child: Row(
                       children: [

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:social/layout/cubit/states.dart';
+import 'package:social/models/message_model.dart';
 import 'package:social/models/post_model.dart';
 import 'package:social/models/social_user_model.dart';
 import 'package:social/modules/chats/chats_screen.dart';
@@ -55,6 +56,9 @@ class SocialCubit extends Cubit<SocialStates> {
   ];
 
   void changeBottomNav(int index) {
+    if (index == 1) {
+      getUsers();
+    }
     if (index == 2)
       emit(NewPostState());
     else {
@@ -240,7 +244,11 @@ class SocialCubit extends Cubit<SocialStates> {
         .putFile(postImage)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
-        createPost(dateTime: dateTime, text: text, postImage: value);
+        createPost(
+          dateTime: dateTime,
+          text: text,
+          postImage: value,
+        );
       }).catchError((error) {
         emit(CreatePostSuccessState());
       });
@@ -285,15 +293,17 @@ class SocialCubit extends Cubit<SocialStates> {
   void getPosts() {
     FirebaseFirestore.instance.collection('posts').get().then((value) {
       value.docs.forEach((element) {
-        element.reference
-            .collection('likes')
-            .get()
-            .then((value) {
-              like.add(value.docs.length);
-              postsId.add(element.id);
-              posts.add(PostModel.fromJson(element.data()));
-        })
-            .catchError((error) {});
+        element.reference.collection('likes').get().then(
+          (value) {
+            like.add(value.docs.length);
+            postsId.add(element.id);
+            posts.add(
+              PostModel.fromJson(
+                element.data(),
+              ),
+            );
+          },
+        ).catchError((error) {});
       });
 
       emit(GetPostsSuccessState());
@@ -321,4 +331,139 @@ class SocialCubit extends Cubit<SocialStates> {
   }
 
 //////////////////////////////////////////////////
+//the get all user on the app at the cate
+
+  List<UserModel> users = [];
+
+  void getUsers() {
+    if (users.length == 0)
+      FirebaseFirestore.instance.collection('users').get().then((value) {
+        value.docs.forEach(
+          (element) {
+            if (element.data()['uid'] != userModel.uid)
+              users.add(UserModel.fromJson(element.data()));
+          },
+        );
+        emit(GetAllUserSuccessState());
+      }).catchError((error) {
+        emit(GetAllUserErrorState(error.toString()));
+      });
+  }
+
+  ////////////////////////////////////////////////////////
+////chat
+
+  void sendMessage({
+    @required String receiverId,
+    @required String dateTime,
+    @required String text,
+  }) {
+    MessageModel model = MessageModel(
+      text: text,
+      senderId: userModel.uid,
+      receiverId: receiverId,
+      dateTime: dateTime,
+    );
+    //set my chat
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userModel.uid)
+        .collection('chats')
+        .doc(receiverId)
+        .collection('messages')
+        .add(model.toMap())
+        .then((value) {
+      emit(SendMessageSuccessState());
+    }).catchError((error) {
+      emit(SendMessageErrorState());
+    });
+    //set receiver chat
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(receiverId)
+        .collection('chats')
+        .doc(userModel.uid)
+        .collection('messages')
+        .add(model.toMap())
+        .then((value) {})
+        .catchError((error) {});
+  }
+
+  List<MessageModel> messages = [];
+
+  void getMessage({
+    @required String receiverId,
+  }) {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userModel.uid)
+        .collection('chats')
+        .doc(receiverId)
+        .collection('messages')
+        .orderBy('dateTime')
+        .snapshots()
+        .listen((event) {
+      messages = [];
+
+      event.docs.forEach((element) {
+        messages.add(MessageModel.fromJson(element.data()));
+      });
+      emit(GetMessagesSuccessState());
+    });
+  }
+
+  File chatImage;
+
+  Future<void> gitChatImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      chatImage = File(pickedFile.path);
+      emit(ChatImagePickedSuccessState());
+    } else {
+      emit(ChatImagePickedErrorState());
+    }
+  }
+
+  void removeChatImage() {
+    chatImage = null;
+    emit(RemovePostImageSuccessState());
+  }
+
+  /*void uploadChatImage() {
+    //emit(CreatePostLoadingState());
+
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userModel.uid)
+        .collection('chats')
+        .doc(receiverId)
+        .collection('messages')
+        .add(model.toMap())
+        .then((value) {
+      emit(SendMessageSuccessState());
+    }).catchError((error) {
+      emit(SendMessageErrorState());
+    });
+
+
+    firebase_storage.FirebaseStorage
+        .instance
+        .ref()
+        .child('users')
+        .child('posts/${Uri.file(postImage.path).pathSegments.last}')
+        .putFile(postImage)
+        .then((value) {
+      value.ref.getDownloadURL().then((value) {
+        createPost(
+          *//*dateTime: dateTime,
+          text: text,*//*
+          postImage: value,
+        );
+      }).catchError((error) {
+        emit(CreatePostSuccessState());
+      });
+    }).catchError((error) {
+      emit(CreatePostErrorState());
+    });
+  }*/
 }
