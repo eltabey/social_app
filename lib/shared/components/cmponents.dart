@@ -113,6 +113,7 @@ Widget defaultAppBar({
       ),
       title: Text(
         title,
+        style: TextStyle(color: Colors.black),
       ),
       actions: actions,
       titleSpacing: 0.0,

@@ -26,10 +26,11 @@ class SocialLayout extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.white,
-            // textTheme: TextTheme(overline:TextStyle(color: Colors.black)),
+             //textTheme: TextTheme(overline:TextStyle(color: Colors.black)),
             elevation: 0,
             title: Text(
               cubit.titles[cubit.currentIndex],
+              style: TextStyle(color: Colors.black),
             ),
             actions: [
               IconButton(

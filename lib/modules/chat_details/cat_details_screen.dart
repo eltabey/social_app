@@ -66,7 +66,6 @@ class ChatDetailsScreen extends StatelessWidget {
                         itemCount: SocialCubit.get(context).messages.length,
                       ),
                     ),
-                    Spacer(),
                     Container(
                       decoration: BoxDecoration(
                           border: Border.all(width: 1.5, color: Colors.grey),
@@ -104,7 +103,8 @@ class ChatDetailsScreen extends StatelessWidget {
                                             height: 20,
                                           ),
                                           Stack(
-                                            alignment: AlignmentDirectional.topEnd,
+                                            alignment:
+                                                AlignmentDirectional.topEnd,
                                             children: [
                                               Container(
                                                 width: double.infinity,
@@ -117,7 +117,8 @@ class ChatDetailsScreen extends StatelessWidget {
                                                             '${userModel.cover}')
                                                         : */
                                                         FileImage(
-                                                            SocialCubit.get(context)
+                                                            SocialCubit.get(
+                                                                    context)
                                                                 .chatImage),
                                                     fit: BoxFit.cover,
                                                   ),
@@ -132,7 +133,8 @@ class ChatDetailsScreen extends StatelessWidget {
                                                   ),
                                                 ),
                                                 onPressed: () {
-                                                  SocialCubit.get(context).removeChatImage();
+                                                  SocialCubit.get(context)
+                                                      .removeChatImage();
                                                 },
                                               )
                                             ],
@@ -143,9 +145,7 @@ class ChatDetailsScreen extends StatelessWidget {
                                           Container(
                                             child: IconButton(
                                               icon: Icon(IconBroken.Send),
-                                              onPressed: () {
-
-                                              },
+                                              onPressed: () {},
                                             ),
                                           )
                                         ],

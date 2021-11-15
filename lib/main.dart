@@ -86,7 +86,7 @@ class MyApp extends StatelessWidget {
                   color: Colors.black,
                 ),
                 textTheme: TextTheme(
-                  title: TextStyle(
+                  subtitle1: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
@@ -98,7 +98,7 @@ class MyApp extends StatelessWidget {
                 backgroundColor: Colors.white,
               ),
               textTheme: TextTheme(
-                  subtitle1: TextStyle(
+                  title: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: Colors.black,
